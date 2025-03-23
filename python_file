@@ -1,0 +1,28 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import control as ctrl
+
+# Definir o sistema de 1ª ordem: G(s) = K / (T * s + 1)
+K = 1  # Ganho do sistema
+T = 10  # Constante de tempo do sistema
+G = ctrl.tf([K], [T, 1])
+
+# Criar um controlador PID
+Kp = 2.0  # Ganho proporcional
+Ki = 0.1  # Ganho integral
+Kd = 1.0  # Ganho derivativo
+PID = ctrl.pid(Kp, Ki, Kd)
+
+# Criar o sistema em malha fechada
+sistema_malha_fechada = ctrl.feedback(PID * G)
+
+# Simular a resposta ao degrau
+t, y = ctrl.step_response(sistema_malha_fechada)
+
+# Plotar o resultado
+plt.plot(t, y)
+plt.xlabel('Tempo (s)')
+plt.ylabel('Temperatura')
+plt.title('Resposta do Sistema com Controle PID')
+plt.grid()
+plt.show()
